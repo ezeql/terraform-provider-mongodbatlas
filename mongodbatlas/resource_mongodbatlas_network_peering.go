@@ -46,8 +46,7 @@ func resourceMongoDBAtlasNetworkPeering() *schema.Resource {
 			},
 			"accepter_region_name": {
 				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
+				Required: true,
 			},
 			"aws_account_id": {
 				Type:     schema.TypeString,
