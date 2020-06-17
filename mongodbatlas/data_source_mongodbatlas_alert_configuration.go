@@ -197,18 +197,23 @@ func dataSourceMongoDBAtlasAlertConfigurationRead(d *schema.ResourceData, meta i
 	if err := d.Set("event_type", alert.EventTypeName); err != nil {
 		return fmt.Errorf(errorAlertConfSetting, "event_type", projectID, err)
 	}
+
 	if err := d.Set("created", alert.Created); err != nil {
 		return fmt.Errorf(errorAlertConfSetting, "created", projectID, err)
 	}
+
 	if err := d.Set("updated", alert.Updated); err != nil {
 		return fmt.Errorf(errorAlertConfSetting, "updated", projectID, err)
 	}
+
 	if err := d.Set("matcher", flattenAlertConfigurationMatchers(alert.Matchers)); err != nil {
 		return fmt.Errorf(errorAlertConfSetting, "matcher", projectID, err)
 	}
+
 	if err := d.Set("metric_threshold", flattenAlertConfigurationMetricThreshold(alert.MetricThreshold)); err != nil {
 		return fmt.Errorf(errorAlertConfSetting, "metric_threshold", projectID, err)
 	}
+
 	if err := d.Set("notification", flattenAlertConfigurationNotifications(alert.Notifications)); err != nil {
 		return fmt.Errorf(errorAlertConfSetting, "notification", projectID, err)
 	}

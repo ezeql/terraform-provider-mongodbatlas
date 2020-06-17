@@ -59,7 +59,6 @@ func TestAccResourceMongoDBAtlasCloudProviderSnapshotBackupPolicy_basic(t *testi
 }
 
 func TestAccResourceMongoDBAtlasCloudProviderSnapshotBackupPolicy_importBasic(t *testing.T) {
-
 	resourceName := "mongodbatlas_cloud_provider_snapshot_backup_policy.test"
 
 	projectID := os.Getenv("MONGODB_ATLAS_PROJECT_ID")
@@ -96,6 +95,7 @@ func testAccCheckMongoDBAtlasCloudProviderSnapshotBackupPolicyExists(resourceNam
 		if !ok {
 			return fmt.Errorf("not found: %s", resourceName)
 		}
+
 		if rs.Primary.ID == "" {
 			return fmt.Errorf("no ID is set")
 		}
@@ -106,8 +106,9 @@ func testAccCheckMongoDBAtlasCloudProviderSnapshotBackupPolicyExists(resourceNam
 
 		schedule, _, err := conn.CloudProviderSnapshotBackupPolicies.Get(context.Background(), projectID, clusterName)
 		if err != nil || schedule == nil {
-			return fmt.Errorf("Cloud Provider Snapshot Schedule (%s) does not exist: %s", rs.Primary.ID, err)
+			return fmt.Errorf("cloud Provider Snapshot Schedule (%s) does not exist: %s", rs.Primary.ID, err)
 		}
+
 		return nil
 	}
 }
@@ -130,9 +131,10 @@ func testAccCheckMongoDBAtlasCloudProviderSnapshotBackupPolicyDestroy(s *terrafo
 
 		schedule, _, err := conn.CloudProviderSnapshotBackupPolicies.Get(context.Background(), projectID, clusterName)
 		if schedule != nil || err == nil {
-			return fmt.Errorf("Cloud Provider Snapshot Schedule (%s) still exists", rs.Primary.ID)
+			return fmt.Errorf("cloud Provider Snapshot Schedule (%s) still exists", rs.Primary.ID)
 		}
 	}
+
 	return nil
 }
 
@@ -140,9 +142,11 @@ func testAccCheckMongoDBAtlasCloudProviderSnapshotBackupPolicyImportStateIDFunc(
 	return func(s *terraform.State) (string, error) {
 		rs, ok := s.RootModule().Resources[resourceName]
 		if !ok {
-			return "", fmt.Errorf("Not found: %s", resourceName)
+			return "", fmt.Errorf("not found: %s", resourceName)
 		}
+
 		ids := decodeStateID(rs.Primary.ID)
+
 		return fmt.Sprintf("%s-%s", ids["project_id"], ids["cluster_name"]), nil
 	}
 }
@@ -167,9 +171,9 @@ func testAccMongoDBAtlasCloudProviderSnapshotBackupPolicyConfig(projectID, clust
 			project_id   = mongodbatlas_cluster.my_cluster.project_id
 			cluster_name = mongodbatlas_cluster.my_cluster.name
 
-			reference_hour_of_day    = %d 
-			reference_minute_of_hour = %d 
-			restore_window_days      = %d 
+			reference_hour_of_day    = %d
+			reference_minute_of_hour = %d
+			restore_window_days      = %d
 
 
 			policies {

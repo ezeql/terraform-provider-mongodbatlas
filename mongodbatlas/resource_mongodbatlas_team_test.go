@@ -77,7 +77,6 @@ func TestAccResourceMongoDBAtlasTeam_basic(t *testing.T) {
 			},
 		},
 	})
-
 }
 
 func TestAccResourceMongoDBAtlasTeam_importBasic(t *testing.T) {
@@ -129,6 +128,7 @@ func testAccCheckMongoDBAtlasTeamExists(resourceName string, team *matlas.Team) 
 			*team = *teamResp
 			return nil
 		}
+
 		return fmt.Errorf("team(%s) does not exist", id)
 	}
 }
@@ -138,6 +138,7 @@ func testAccCheckMongoDBAtlasTeamAttributes(team *matlas.Team, name string) reso
 		if team.Name != name {
 			return fmt.Errorf("bad name: %s", team.Name)
 		}
+
 		return nil
 	}
 }
@@ -159,6 +160,7 @@ func testAccCheckMongoDBAtlasTeamDestroy(s *terraform.State) error {
 			return fmt.Errorf("team (%s) still exists", id)
 		}
 	}
+
 	return nil
 }
 
@@ -166,12 +168,10 @@ func testAccCheckMongoDBAtlasTeamStateIDFunc(resourceName string) resource.Impor
 	return func(s *terraform.State) (string, error) {
 		rs, ok := s.RootModule().Resources[resourceName]
 		if !ok {
-			return "", fmt.Errorf("Not found: %s", resourceName)
+			return "", fmt.Errorf("not found: %s", resourceName)
 		}
-		orgID := rs.Primary.Attributes["org_id"]
-		id := rs.Primary.Attributes["team_id"]
 
-		return fmt.Sprintf("%s-%s", orgID, id), nil
+		return fmt.Sprintf("%s-%s", rs.Primary.Attributes["org_id"], rs.Primary.Attributes["team_id"]), nil
 	}
 }
 

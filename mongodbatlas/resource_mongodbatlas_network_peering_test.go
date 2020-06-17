@@ -49,7 +49,6 @@ func TestAccResourceMongoDBAtlasNetworkPeering_basicAWS(t *testing.T) {
 			},
 		},
 	})
-
 }
 
 func TestAccResourceMongoDBAtlasNetworkPeering_basicAzure(t *testing.T) {
@@ -131,8 +130,9 @@ func testAccCheckMongoDBAtlasNetworkPeeringImportStateIDFunc(resourceName string
 	return func(s *terraform.State) (string, error) {
 		rs, ok := s.RootModule().Resources[resourceName]
 		if !ok {
-			return "", fmt.Errorf("Not found: %s", resourceName)
+			return "", fmt.Errorf("not found: %s", resourceName)
 		}
+
 		ids := decodeStateID(rs.Primary.ID)
 
 		return fmt.Sprintf("%s-%s-%s", ids["project_id"], ids["peer_id"], ids["provider_name"]), nil
@@ -151,12 +151,14 @@ func testAccCheckMongoDBAtlasNetworkPeeringExists(resourceName string, peer *mat
 		if rs.Primary.ID == "" {
 			return fmt.Errorf("no ID is set")
 		}
+
 		ids := decodeStateID(rs.Primary.ID)
 		log.Printf("[DEBUG] projectID: %s", ids["project_id"])
 
 		if peerResp, _, err := conn.Peers.Get(context.Background(), ids["project_id"], ids["peer_id"]); err == nil {
 			*peer = *peerResp
 			peer.ProviderName = ids["provider_name"]
+
 			return nil
 		}
 
@@ -179,6 +181,7 @@ func testAccCheckMongoDBAtlasNetworkPeeringDestroy(s *terraform.State) error {
 			return fmt.Errorf("peer (%s) still exists", ids["peer_id"])
 		}
 	}
+
 	return nil
 }
 

@@ -111,15 +111,19 @@ func resourceMongoDBAtlasProjectRead(d *schema.ResourceData, meta interface{}) e
 	if err := d.Set("name", projectRes.Name); err != nil {
 		return fmt.Errorf(errorProjectSetting, `name`, projectID, err)
 	}
+
 	if err := d.Set("org_id", projectRes.OrgID); err != nil {
 		return fmt.Errorf(errorProjectSetting, `org_id`, projectID, err)
 	}
+
 	if err := d.Set("cluster_count", projectRes.ClusterCount); err != nil {
 		return fmt.Errorf(errorProjectSetting, `clusterCount`, projectID, err)
 	}
+
 	if err := d.Set("created", projectRes.Created); err != nil {
 		return fmt.Errorf(errorProjectSetting, `created`, projectID, err)
 	}
+
 	if err := d.Set("teams", flattenTeams(teams)); err != nil {
 		return fmt.Errorf(errorProjectSetting, `created`, projectID, err)
 	}
@@ -179,6 +183,7 @@ func resourceMongoDBAtlasProjectDelete(d *schema.ResourceData, meta interface{})
 	if err != nil {
 		return fmt.Errorf(errorProjectDelete, projectID, err)
 	}
+
 	return nil
 }
 
@@ -192,6 +197,7 @@ func expandTeamsSet(teams *schema.Set) []*matlas.ProjectTeam {
 			RoleNames: expandStringList(v["role_names"].(*schema.Set).List()),
 		}
 	}
+
 	return res
 }
 
@@ -205,6 +211,7 @@ func expandTeamsList(teams []interface{}) []*matlas.ProjectTeam {
 			RoleNames: expandStringList(v["role_names"].(*schema.Set).List()),
 		}
 	}
+
 	return res
 }
 
@@ -218,6 +225,7 @@ func flattenTeams(ta *matlas.TeamsAssigned) []map[string]interface{} {
 			"role_names": team.RoleNames,
 		}
 	}
+
 	return res
 }
 
@@ -229,7 +237,6 @@ func getStateTeams(d *schema.ResourceData) ([]interface{}, []interface{}, []inte
 	changedTeams := make([]interface{}, 0)
 
 	for _, changed := range newTeams.List() {
-
 		for _, removed := range removedTeams.List() {
 			if changed.(map[string]interface{})["team_id"] == removed.(map[string]interface{})["team_id"] {
 				removedTeams.Remove(removed)

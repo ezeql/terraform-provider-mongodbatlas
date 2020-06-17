@@ -90,12 +90,15 @@ func resourceMongoDBAtlasMaintenanceWindowCreate(d *schema.ResourceData, meta in
 	}
 
 	maintenanceWindowReq := &matlas.MaintenanceWindow{}
+
 	if dayOfWeek, ok := d.GetOk("day_of_week"); ok {
 		maintenanceWindowReq.DayOfWeek = cast.ToInt(dayOfWeek)
 	}
+
 	if hourOfDay, ok := d.GetOk("hour_of_day"); ok {
 		maintenanceWindowReq.HourOfDay = pointy.Int(cast.ToInt(hourOfDay))
 	}
+
 	if numberOfDeferrals, ok := d.GetOk("number_of_deferrals"); ok {
 		maintenanceWindowReq.NumberOfDeferrals = cast.ToInt(numberOfDeferrals)
 	}
@@ -122,9 +125,11 @@ func resourceMongoDBAtlasMaintenanceWindowRead(d *schema.ResourceData, meta inte
 	if err := d.Set("day_of_week", maintenanceWindow.DayOfWeek); err != nil {
 		return fmt.Errorf(errorMaintenanceRead, d.Id(), err)
 	}
+
 	if err := d.Set("hour_of_day", maintenanceWindow.HourOfDay); err != nil {
 		return fmt.Errorf(errorMaintenanceRead, d.Id(), err)
 	}
+
 	if err := d.Set("number_of_deferrals", maintenanceWindow.NumberOfDeferrals); err != nil {
 		return fmt.Errorf(errorMaintenanceRead, d.Id(), err)
 	}
@@ -154,9 +159,11 @@ func resourceMongoDBAtlasMaintenanceWindowUpdate(d *schema.ResourceData, meta in
 	if d.HasChange("day_of_week") {
 		maintenanceWindowReq.DayOfWeek = cast.ToInt(d.Get("day_of_week"))
 	}
+
 	if d.HasChange("hour_of_day") {
 		maintenanceWindowReq.HourOfDay = pointy.Int(cast.ToInt(d.Get("hour_of_day")))
 	}
+
 	if d.HasChange("number_of_deferrals") {
 		maintenanceWindowReq.NumberOfDeferrals = cast.ToInt(d.Get("number_of_deferrals"))
 	}

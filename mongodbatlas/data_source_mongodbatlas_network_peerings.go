@@ -162,6 +162,7 @@ func flattenNetworkPeerings(peers []matlas.Peer) []map[string]interface{} {
 			}
 		}
 	}
+
 	return peersMap
 }
 
@@ -172,5 +173,6 @@ func getProviderNameByPeer(peer matlas.Peer) string {
 	} else if peer.NetworkName != "" {
 		provider = "GCP"
 	}
+
 	return provider
 }

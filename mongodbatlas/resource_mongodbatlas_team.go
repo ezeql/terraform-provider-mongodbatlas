@@ -89,10 +89,11 @@ func resourceMongoDBAtlasTeamRead(d *schema.ResourceData, meta interface{}) erro
 		return fmt.Errorf(errorTeamRead, err)
 	}
 
-	if err := d.Set("name", team.Name); err != nil {
+	if err = d.Set("name", team.Name); err != nil {
 		return fmt.Errorf(errorTeamSetting, "name", teamID, err)
 	}
-	if err := d.Set("team_id", team.ID); err != nil {
+
+	if err = d.Set("team_id", team.ID); err != nil {
 		return fmt.Errorf(errorTeamSetting, "team_id", teamID, err)
 	}
 
@@ -102,7 +103,7 @@ func resourceMongoDBAtlasTeamRead(d *schema.ResourceData, meta interface{}) erro
 		return fmt.Errorf(errorTeamRead, err)
 	}
 
-	var usernames []string
+	usernames := []string{}
 	for _, u := range users {
 		usernames = append(usernames, u.Username)
 	}
@@ -145,6 +146,7 @@ func resourceMongoDBAtlasTeamUpdate(d *schema.ResourceData, meta interface{}) er
 
 		// Verify if the gave users exists
 		var newUsers []string
+
 		for _, username := range d.Get("usernames").(*schema.Set).List() {
 			user, _, err := conn.AtlasUsers.GetByName(context.Background(), username.(string))
 			if err != nil {
@@ -197,6 +199,7 @@ func resourceMongoDBAtlasTeamImportState(d *schema.ResourceData, meta interface{
 	if err := d.Set("org_id", orgID); err != nil {
 		log.Printf("[WARN] Error setting org_id for (%s): %s", teamID, err)
 	}
+
 	if err := d.Set("team_id", teamID); err != nil {
 		log.Printf("[WARN] Error setting team_id for (%s): %s", teamID, err)
 	}
@@ -214,5 +217,6 @@ func expandStringListFromSetSchema(list *schema.Set) []string {
 	for i, v := range list.List() {
 		res[i] = v.(string)
 	}
+
 	return res
 }

@@ -122,8 +122,9 @@ func testAccCheckMongoDBAtlasPrivateEndpointLinkImportStateIDFunc(resourceName s
 	return func(s *terraform.State) (string, error) {
 		rs, ok := s.RootModule().Resources[resourceName]
 		if !ok {
-			return "", fmt.Errorf("Not found: %s", resourceName)
+			return "", fmt.Errorf("not found: %s", resourceName)
 		}
+
 		ids := decodeStateID(rs.Primary.ID)
 
 		return fmt.Sprintf("%s-%s-%s", ids["project_id"], ids["private_link_id"], ids["interface_endpoint_id"]), nil
@@ -142,13 +143,15 @@ func testAccCheckMongoDBAtlasPrivateEndpointLinkExists(resourceName string) reso
 		if rs.Primary.ID == "" {
 			return fmt.Errorf("no ID is set")
 		}
+
 		ids := decodeStateID(rs.Primary.ID)
 
 		_, _, err := conn.PrivateEndpoints.GetOneInterfaceEndpoint(context.Background(), ids["project_id"], ids["private_link_id"], ids["interface_endpoint_id"])
 		if err == nil {
 			return nil
 		}
-		return fmt.Errorf("MongoDB Interface Endpoint(%s) for the project(%s) does not exist", rs.Primary.Attributes["interface_endpoint_id"], rs.Primary.Attributes["project_id"])
+
+		return fmt.Errorf("the MongoDB Interface Endpoint(%s) for the project(%s) does not exist", rs.Primary.Attributes["interface_endpoint_id"], rs.Primary.Attributes["project_id"])
 	}
 }
 
@@ -163,9 +166,10 @@ func testAccCheckMongoDBAtlasPrivateEndpointLinkDestroy(s *terraform.State) erro
 		ids := decodeStateID(rs.Primary.ID)
 		_, _, err := conn.PrivateEndpoints.GetOneInterfaceEndpoint(context.Background(), ids["project_id"], ids["private_link_id"], ids["interface_endpoint_id"])
 		if err == nil {
-			return fmt.Errorf("MongoDB Private Endpoint(%s) still exists", ids["interface_endpoint_id"])
+			return fmt.Errorf("the MongoDB Private Endpoint(%s) still exists", ids["interface_endpoint_id"])
 		}
 	}
+
 	return nil
 }
 

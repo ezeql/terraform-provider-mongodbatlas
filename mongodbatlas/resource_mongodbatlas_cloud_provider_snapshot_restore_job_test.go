@@ -52,7 +52,6 @@ func TestAccResourceMongoDBAtlasCloudProviderSnapshotRestoreJob_basic(t *testing
 }
 
 func TestAccResourceMongoDBAtlasCloudProviderSnapshotRestoreJob_importBasic(t *testing.T) {
-
 	resourceName := "mongodbatlas_cloud_provider_snapshot_restore_job.test"
 
 	projectID := os.Getenv("MONGODB_ATLAS_PROJECT_ID")
@@ -111,6 +110,7 @@ func testAccCheckMongoDBAtlasCloudProviderSnapshotRestoreJobExists(resourceName 
 		if !ok {
 			return fmt.Errorf("not found: %s", resourceName)
 		}
+
 		if rs.Primary.Attributes["snapshot_restore_job_id"] == "" {
 			return fmt.Errorf("no ID is set")
 		}
@@ -127,6 +127,7 @@ func testAccCheckMongoDBAtlasCloudProviderSnapshotRestoreJobExists(resourceName 
 			*cloudProviderSnapshotRestoreJob = *snapshotRes
 			return nil
 		}
+
 		return fmt.Errorf("cloudProviderSnapshotRestoreJob (%s) does not exist", rs.Primary.Attributes["snapshot_restore_job_id"])
 	}
 }
@@ -136,6 +137,7 @@ func testAccCheckMongoDBAtlasCloudProviderSnapshotRestoreJobAttributes(cloudProv
 		if cloudProviderSnapshotRestoreJob.DeliveryType != deliveryType {
 			return fmt.Errorf("bad cloudProviderSnapshotRestoreJob deliveryType: %s", cloudProviderSnapshotRestoreJob.DeliveryType)
 		}
+
 		return nil
 	}
 }
@@ -160,6 +162,7 @@ func testAccCheckMongoDBAtlasCloudProviderSnapshotRestoreJobDestroy(s *terraform
 			return fmt.Errorf("cloudProviderSnapshotRestoreJob (%s) still exists", rs.Primary.Attributes["snapshot_restore_job_id"])
 		}
 	}
+
 	return nil
 }
 
@@ -167,8 +170,9 @@ func testAccCheckMongoDBAtlasCloudProviderSnapshotRestoreJobImportStateIDFunc(re
 	return func(s *terraform.State) (string, error) {
 		rs, ok := s.RootModule().Resources[resourceName]
 		if !ok {
-			return "", fmt.Errorf("Not found: %s", resourceName)
+			return "", fmt.Errorf("not found: %s", resourceName)
 		}
+
 		return fmt.Sprintf("%s-%s-%s", rs.Primary.Attributes["project_id"], rs.Primary.Attributes["cluster_name"], rs.Primary.Attributes["snapshot_restore_job_id"]), nil
 	}
 }

@@ -45,7 +45,6 @@ func TestAccResourceMongoDBAtlasCloudProviderSnapshot_basic(t *testing.T) {
 }
 
 func TestAccResourceMongoDBAtlasCloudProviderSnapshot_importBasic(t *testing.T) {
-
 	resourceName := "mongodbatlas_cloud_provider_snapshot.test"
 
 	projectID := os.Getenv("MONGODB_ATLAS_PROJECT_ID")
@@ -80,6 +79,7 @@ func testAccCheckMongoDBAtlasCloudProviderSnapshotExists(resourceName string, cl
 		if !ok {
 			return fmt.Errorf("not found: %s", resourceName)
 		}
+
 		if rs.Primary.Attributes["snapshot_id"] == "" {
 			return fmt.Errorf("no ID is set")
 		}
@@ -97,6 +97,7 @@ func testAccCheckMongoDBAtlasCloudProviderSnapshotExists(resourceName string, cl
 			*cloudProviderSnapshot = *res
 			return nil
 		}
+
 		return fmt.Errorf("cloudProviderSnapshot (%s) does not exist", rs.Primary.Attributes["snapshot_id"])
 	}
 }
@@ -106,6 +107,7 @@ func testAccCheckMongoDBAtlasCloudProviderSnapshotAttributes(cloudProviderSnapsh
 		if cloudProviderSnapshot.Description != description {
 			return fmt.Errorf("bad cloudProviderSnapshot description: %s", cloudProviderSnapshot.Description)
 		}
+
 		return nil
 	}
 }
@@ -130,6 +132,7 @@ func testAccCheckMongoDBAtlasCloudProviderSnapshotDestroy(s *terraform.State) er
 			return fmt.Errorf("cloudProviderSnapshot (%s) still exists", rs.Primary.Attributes["snapshot_id"])
 		}
 	}
+
 	return nil
 }
 
@@ -137,7 +140,7 @@ func testAccCheckMongoDBAtlasCloudProviderSnapshotImportStateIDFunc(resourceName
 	return func(s *terraform.State) (string, error) {
 		rs, ok := s.RootModule().Resources[resourceName]
 		if !ok {
-			return "", fmt.Errorf("Not found: %s", resourceName)
+			return "", fmt.Errorf("not found: %s", resourceName)
 		}
 
 		log.Printf("%s-%s-%s", rs.Primary.Attributes["project_id"], rs.Primary.Attributes["cluster_name"], rs.Primary.Attributes["snapshot_id"])
@@ -190,5 +193,4 @@ func TestResourceMongoDBAtlasCloudProviderSnapshot_snapshotID(t *testing.T) {
 	if _, err := splitSnapshotImportID("5cf5a45a9ccf6400e60981b6projectname-environment-mongo-global-cluster5cf5a45a9ccf6400e60981b7"); err == nil {
 		t.Error("splitSnapshotImportID expected to have error")
 	}
-
 }

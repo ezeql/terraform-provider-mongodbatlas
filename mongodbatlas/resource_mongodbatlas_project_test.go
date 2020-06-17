@@ -145,7 +145,6 @@ func TestAccResourceMongoDBAtlasProject_withUpdatedRole(t *testing.T) {
 }
 
 func TestAccResourceMongoDBAtlasProject_importBasic(t *testing.T) {
-
 	projectName := fmt.Sprintf("test-acc-%s", acctest.RandString(10))
 	orgID := os.Getenv("MONGODB_ATLAS_ORG_ID")
 
@@ -179,6 +178,7 @@ func testAccCheckMongoDBAtlasProjectExists(resourceName string, project *matlas.
 		if !ok {
 			return fmt.Errorf("not found: %s", resourceName)
 		}
+
 		if rs.Primary.ID == "" {
 			return fmt.Errorf("no ID is set")
 		}
@@ -189,6 +189,7 @@ func testAccCheckMongoDBAtlasProjectExists(resourceName string, project *matlas.
 			*project = *projectResp
 			return nil
 		}
+
 		return fmt.Errorf("project (%s) does not exist", rs.Primary.ID)
 	}
 }
@@ -198,6 +199,7 @@ func testAccCheckMongoDBAtlasProjectAttributes(project *matlas.Project, projectN
 		if project.Name != projectName {
 			return fmt.Errorf("bad project name: %s", project.Name)
 		}
+
 		return nil
 	}
 }
@@ -215,6 +217,7 @@ func testAccCheckMongoDBAtlasProjectDestroy(s *terraform.State) error {
 			return fmt.Errorf("project (%s) still exists", rs.Primary.ID)
 		}
 	}
+
 	return nil
 }
 
@@ -222,8 +225,9 @@ func testAccCheckMongoDBAtlasProjectImportStateIDFunc(resourceName string) resou
 	return func(s *terraform.State) (string, error) {
 		rs, ok := s.RootModule().Resources[resourceName]
 		if !ok {
-			return "", fmt.Errorf("Not found: %s", resourceName)
+			return "", fmt.Errorf("not found: %s", resourceName)
 		}
+
 		return rs.Primary.ID, nil
 	}
 }

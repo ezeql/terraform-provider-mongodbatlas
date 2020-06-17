@@ -60,9 +60,9 @@ func dataSourceMongoDBAtlasGlobalClusterRead(d *schema.ResourceData, meta interf
 	globalCluster, resp, err := conn.GlobalClusters.Get(context.Background(), projectID, clusterName)
 	if err != nil {
 		if resp != nil && resp.StatusCode == http.StatusNotFound {
-
 			return nil
 		}
+
 		return fmt.Errorf(errorGlobalClusterRead, clusterName, err)
 	}
 

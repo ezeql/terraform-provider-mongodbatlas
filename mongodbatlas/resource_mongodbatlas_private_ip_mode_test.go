@@ -40,7 +40,6 @@ func TestAccResourcePrivateIPMode_basic(t *testing.T) {
 			},
 		},
 	})
-
 }
 
 func testAccCheckPrivateIPModeExists(resourceName string, privateIPMode *matlas.PrivateIPMode) resource.TestCheckFunc {
@@ -60,6 +59,7 @@ func testAccCheckPrivateIPModeExists(resourceName string, privateIPMode *matlas.
 			*privateIPMode = *privateIPModeResp
 			enabled, _ := strconv.ParseBool(rs.Primary.Attributes["enabled"])
 			privateIPMode.Enabled = pointy.Bool(enabled)
+
 			return nil
 		}
 
@@ -72,6 +72,7 @@ func testAccCheckPrivateIPModeAttributes(privateIPMode *matlas.PrivateIPMode, en
 		if *privateIPMode.Enabled != *enabled {
 			return fmt.Errorf("bad enabled: %t", *privateIPMode.Enabled)
 		}
+
 		return nil
 	}
 }
@@ -87,10 +88,10 @@ func testAccCheckPrivateIPModeDestroy(s *terraform.State) error {
 		privateIPMode, _, err := conn.PrivateIPMode.Get(context.Background(), rs.Primary.Attributes["project_id"])
 
 		if err == nil && *privateIPMode.Enabled {
-
 			return fmt.Errorf("privateIPMode from project (%s) still enabled", rs.Primary.Attributes["project_id"])
 		}
 	}
+
 	return nil
 }
 

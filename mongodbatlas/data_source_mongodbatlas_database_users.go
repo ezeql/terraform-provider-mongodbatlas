@@ -123,5 +123,6 @@ func flattenDBUsers(dbUsers []matlas.DatabaseUser) []map[string]interface{} {
 			}
 		}
 	}
+
 	return dbUsersMap
 }

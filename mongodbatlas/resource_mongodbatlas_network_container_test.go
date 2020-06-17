@@ -169,8 +169,9 @@ func testAccCheckMongoDBAtlasNetworkContainerImportStateIDFunc(resourceName stri
 	return func(s *terraform.State) (string, error) {
 		rs, ok := s.RootModule().Resources[resourceName]
 		if !ok {
-			return "", fmt.Errorf("Not found: %s", resourceName)
+			return "", fmt.Errorf("not found: %s", resourceName)
 		}
+
 		return fmt.Sprintf("%s-%s", rs.Primary.Attributes["project_id"], rs.Primary.Attributes["container_id"]), nil
 	}
 }
@@ -183,6 +184,7 @@ func testAccCheckMongoDBAtlasNetworkContainerExists(resourceName string, contain
 		if !ok {
 			return fmt.Errorf("not found: %s", resourceName)
 		}
+
 		if rs.Primary.ID == "" {
 			return fmt.Errorf("no ID is set")
 		}
@@ -193,6 +195,7 @@ func testAccCheckMongoDBAtlasNetworkContainerExists(resourceName string, contain
 			*container = *containerResp
 			return nil
 		}
+
 		return fmt.Errorf("container(%s:%s) does not exist", rs.Primary.Attributes["project_id"], rs.Primary.Attributes["container_id"])
 	}
 }
@@ -202,6 +205,7 @@ func testAccCheckMongoDBAtlasNetworkContainerAttributes(container *matlas.Contai
 		if container.ProviderName != providerName {
 			return fmt.Errorf("bad provider name: %s", container.ProviderName)
 		}
+
 		return nil
 	}
 }
@@ -221,6 +225,7 @@ func testAccCheckMongoDBAtlasNetworkContainerDestroy(s *terraform.State) error {
 			return fmt.Errorf("container (%s:%s) still exists", rs.Primary.Attributes["project_id"], rs.Primary.Attributes["container_id"])
 		}
 	}
+
 	return nil
 }
 

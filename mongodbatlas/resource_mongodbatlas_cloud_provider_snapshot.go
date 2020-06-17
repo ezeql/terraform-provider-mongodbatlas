@@ -102,30 +102,39 @@ func resourceMongoDBAtlasCloudProviderSnapshotRead(d *schema.ResourceData, meta 
 	if err = d.Set("snapshot_id", snapshotReq.ID); err != nil {
 		return fmt.Errorf("error setting `snapshot_id` for snapshot (%s): %s", ids["snapshot_id"], err)
 	}
+
 	if err = d.Set("created_at", snapshotReq.CreatedAt); err != nil {
 		return fmt.Errorf("error setting `created_at` for snapshot (%s): %s", ids["snapshot_id"], err)
 	}
+
 	if err = d.Set("expires_at", snapshotReq.ExpiresAt); err != nil {
 		return fmt.Errorf("error setting `expires_at` for snapshot (%s): %s", ids["snapshot_id"], err)
 	}
+
 	if err = d.Set("master_key_uuid", snapshotReq.MasterKeyUUID); err != nil {
 		return fmt.Errorf("error setting `master_key_uuid` for snapshot (%s): %s", ids["snapshot_id"], err)
 	}
+
 	if err = d.Set("mongod_version", snapshotReq.MongodVersion); err != nil {
 		return fmt.Errorf("error setting `mongod_version` for snapshot (%s): %s", ids["snapshot_id"], err)
 	}
+
 	if err = d.Set("snapshot_type", snapshotReq.SnapshotType); err != nil {
 		return fmt.Errorf("error setting `snapshot_type` for snapshot (%s): %s", ids["snapshot_id"], err)
 	}
+
 	if err = d.Set("status", snapshotReq.Status); err != nil {
 		return fmt.Errorf("error setting `status` for snapshot (%s): %s", ids["snapshot_id"], err)
 	}
+
 	if err = d.Set("storage_size_bytes", snapshotReq.StorageSizeBytes); err != nil {
 		return fmt.Errorf("error setting `storage_size_bytes` for snapshot (%s): %s", ids["snapshot_id"], err)
 	}
+
 	if err = d.Set("type", snapshotReq.Type); err != nil {
 		return fmt.Errorf("error setting `type` for snapshot (%s): %s", ids["snapshot_id"], err)
 	}
+
 	return nil
 }
 
@@ -189,6 +198,7 @@ func resourceMongoDBAtlasCloudProviderSnapshotDelete(d *schema.ResourceData, met
 	if err != nil {
 		return fmt.Errorf("error deleting a snapshot (%s): %s", ids["snapshot_id"], err)
 	}
+
 	return nil
 }
 
@@ -201,7 +211,7 @@ func resourceCloudProviderSnapshotRefreshFunc(requestParameters *matlas.Snapshot
 			return nil, "", err
 		} else if err != nil || c.Status == "failed" {
 			if resp.StatusCode == 404 {
-				return 42, "DELETED", nil
+				return "", "DELETED", nil
 			}
 			log.Printf("Error reading MongoDB snapshot %s: %s", requestParameters.SnapshotID, err)
 			return nil, "", err
@@ -237,9 +247,11 @@ func resourceMongoDBAtlasCloudProviderSnapshotImportState(d *schema.ResourceData
 	if err := d.Set("project_id", requestParameters.GroupID); err != nil {
 		log.Printf("[WARN] Error setting project_id for (%s): %s", requestParameters.SnapshotID, err)
 	}
+
 	if err := d.Set("cluster_name", requestParameters.ClusterName); err != nil {
 		log.Printf("[WARN] Error setting cluster_name for (%s): %s", requestParameters.SnapshotID, err)
 	}
+
 	if err := d.Set("description", u.Description); err != nil {
 		log.Printf("[WARN] Error setting description for (%s): %s", requestParameters.SnapshotID, err)
 	}
@@ -247,10 +259,10 @@ func resourceMongoDBAtlasCloudProviderSnapshotImportState(d *schema.ResourceData
 	return []*schema.ResourceData{d}, nil
 }
 
-func splitSnapshotImportID(ID string) (*matlas.SnapshotReqPathParameters, error) {
+func splitSnapshotImportID(id string) (*matlas.SnapshotReqPathParameters, error) {
 	var re = regexp.MustCompile(`(?s)^([0-9a-fA-F]{24})-(.*)-([0-9a-fA-F]{24})$`)
 
-	parts := re.FindStringSubmatch(ID)
+	parts := re.FindStringSubmatch(id)
 
 	if len(parts) != 4 {
 		return nil, errors.New("import format error: to import a snapshot, use the format {project_id}-{cluster_name}-{snapshot_id}")

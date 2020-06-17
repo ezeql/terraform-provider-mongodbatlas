@@ -70,9 +70,9 @@ func resourceMongoDBAtlasPrivateIPModeRead(d *schema.ResourceData, meta interfac
 	privateIPMode, resp, err := conn.PrivateIPMode.Get(context.Background(), projectID)
 	if err != nil {
 		if resp != nil && resp.StatusCode == http.StatusNotFound {
-
 			return nil
 		}
+
 		return fmt.Errorf(errorPrivateIPModeRead, projectID, err)
 	}
 
@@ -106,5 +106,6 @@ func resourceMongoDBAtlasPrivateIPModeImportState(d *schema.ResourceData, meta i
 	if err := d.Set("project_id", d.Id()); err != nil {
 		log.Printf("[WARN] Error setting project_id for private IP Mode: %s", err)
 	}
+
 	return []*schema.ResourceData{d}, nil
 }

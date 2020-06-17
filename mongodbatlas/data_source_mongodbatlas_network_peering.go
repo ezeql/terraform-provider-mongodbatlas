@@ -119,6 +119,7 @@ func dataSourceMongoDBAtlasNetworkPeeringRead(d *schema.ResourceData, meta inter
 		if resp != nil && resp.StatusCode == http.StatusNotFound {
 			return nil
 		}
+
 		return fmt.Errorf(errorPeersRead, peerID, err)
 	}
 

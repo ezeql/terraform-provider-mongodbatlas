@@ -29,7 +29,6 @@ func TestAccDataSourceMongoDBAtlasGlobalCluster_basic(t *testing.T) {
 			},
 		},
 	})
-
 }
 
 func testAccDSMongoDBAtlasGlobalClusterConfig(projectID, name string) string {

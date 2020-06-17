@@ -57,7 +57,7 @@ func dataSourceMongoDBAtlasTeamRead(d *schema.ResourceData, meta interface{}) er
 		return fmt.Errorf(errorTeamRead, err)
 	}
 
-	var usernames []string
+	usernames := []string{}
 	for _, u := range users {
 		usernames = append(usernames, u.Username)
 	}

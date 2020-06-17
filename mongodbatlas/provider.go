@@ -93,6 +93,7 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 		PublicKey:  d.Get("public_key").(string),
 		PrivateKey: d.Get("private_key").(string),
 	}
+
 	return config.NewClient(), nil
 }
 
@@ -103,6 +104,7 @@ func encodeStateID(values map[string]string) string {
 	for key, value := range values {
 		encodedValues = append(encodedValues, fmt.Sprintf("%s:%s", encode(key), encode(value)))
 	}
+
 	return strings.Join(encodedValues, "-")
 }
 
@@ -112,6 +114,7 @@ func decodeStateID(stateID string) map[string]string {
 		if err != nil {
 			log.Printf("[WARN] error decoding state ID: %s", err)
 		}
+
 		return string(decodedString)
 	}
 	decodedValues := make(map[string]string)
@@ -121,6 +124,7 @@ func decodeStateID(stateID string) map[string]string {
 		keyValue := strings.Split(value, ":")
 		decodedValues[decode(keyValue[0])] = decode(keyValue[1])
 	}
+
 	return decodedValues
 }
 
@@ -129,6 +133,7 @@ func valRegion(reg interface{}, opt ...string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+
 	if region == "" {
 		return "", fmt.Errorf("region must be set")
 	}
@@ -154,6 +159,7 @@ func flattenLabels(l []matlas.Label) []map[string]interface{} {
 			"value": v.Value,
 		}
 	}
+
 	return labels
 }
 
@@ -168,6 +174,7 @@ func expandLabelSliceFromSetSchema(d *schema.ResourceData) []matlas.Label {
 			Value: v["value"].(string),
 		}
 	}
+
 	return res
 }
 
@@ -177,22 +184,26 @@ func containsLabelOrKey(list []matlas.Label, item matlas.Label) bool {
 			return true
 		}
 	}
+
 	return false
 }
 
 func removeLabel(list []matlas.Label, item matlas.Label) []matlas.Label {
 	var pos int
+
 	for _, v := range list {
 		if reflect.DeepEqual(v, item) {
 			list = append(list[:pos], list[pos+1:]...)
+
 			if pos > 0 {
-				pos = pos - 1
+				pos--
 			}
+
 			continue
 		}
 		pos++
-
 	}
+
 	return list
 }
 
@@ -200,5 +211,6 @@ func expandStringList(list []interface{}) (res []string) {
 	for _, v := range list {
 		res = append(res, v.(string))
 	}
+
 	return
 }

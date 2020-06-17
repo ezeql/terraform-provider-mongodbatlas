@@ -282,6 +282,7 @@ func dataSourceMongoDBAtlasClustersRead(d *schema.ResourceData, meta interface{}
 		if resp != nil && resp.StatusCode == http.StatusNotFound {
 			return nil
 		}
+
 		return fmt.Errorf("error reading cluster list for project(%s): %s", projectID, err)
 	}
 
@@ -296,8 +297,6 @@ func flattenClusters(d *schema.ResourceData, conn *matlas.Client, clusters []mat
 	results := make([]map[string]interface{}, 0)
 
 	for _, cluster := range clusters {
-
-		// Get the snapshot policy and set the data
 		snapshotBackupPolicy, err := flattenCloudProviderSnapshotBackupPolicy(d, conn, cluster.GroupID, cluster.Name)
 		if err != nil {
 			log.Printf("[WARN] Error setting `snapshot_backup_policy` for the cluster(%s): %s", cluster.ID, err)
@@ -337,5 +336,6 @@ func flattenClusters(d *schema.ResourceData, conn *matlas.Client, clusters []mat
 		}
 		results = append(results, result)
 	}
+
 	return results
 }

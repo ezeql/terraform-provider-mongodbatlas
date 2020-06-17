@@ -121,5 +121,6 @@ func flattenNetworkContainers(containers []matlas.Container) []map[string]interf
 			}
 		}
 	}
+
 	return containersMap
 }

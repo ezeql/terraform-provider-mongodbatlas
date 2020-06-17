@@ -187,6 +187,7 @@ func testAccCheckMongoDBAtlasEncryptionAtRestExists(resourceName string) resourc
 		if !ok {
 			return fmt.Errorf("not found: %s", resourceName)
 		}
+
 		if rs.Primary.ID == "" {
 			return fmt.Errorf("no ID is set")
 		}
@@ -194,6 +195,7 @@ func testAccCheckMongoDBAtlasEncryptionAtRestExists(resourceName string) resourc
 		if _, _, err := conn.EncryptionsAtRest.Get(context.Background(), rs.Primary.ID); err == nil {
 			return nil
 		}
+
 		return fmt.Errorf("encryptionAtRest (%s) does not exist", rs.Primary.ID)
 	}
 }
@@ -215,6 +217,7 @@ func testAccCheckMongoDBAtlasEncryptionAtRestDestroy(s *terraform.State) error {
 			return fmt.Errorf("encryptionAtRest (%s) still exists: err: %s", rs.Primary.ID, err)
 		}
 	}
+
 	return nil
 }
 
